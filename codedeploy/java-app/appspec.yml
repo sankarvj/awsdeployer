@@ -1,0 +1,20 @@
+version: 0.0
+os: linux
+files:
+  - source: content/ROOT.war
+    destination: /opt/tomcat/webapps/
+permissions:
+  - object: /opt/tomcat/webapps/ROOT/
+    owner: root
+    group: tomcat 
+    mode: 755
+hooks:
+  BeforeInstall:
+    - location: scripts/pre_run.py
+    - location: scripts/deregister_elbs.py
+    - location: scripts/stop_tomcat.sh
+      runas: root
+  ApplicationStart:
+    - location: scripts/start_tomcat.sh
+      runas: root
+    - location: scripts/register_elbs.py
